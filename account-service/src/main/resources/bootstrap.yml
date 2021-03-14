@@ -1,0 +1,65 @@
+spring:
+  profiles:
+    active: "prod-zone1"
+  application:
+    name: myApp
+---
+spring:
+  profiles: dev-zone1
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      config:
+        enabled: true
+      discovery:
+        instanceZone: zone1
+        instance-id: "${spring.application.name}:${random.value}"
+        prefer-ip-address: true
+        # Unregister ghost services
+        #health-check-critical-timeout:
+
+---
+spring:
+  profiles: dev-zone2
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      config:
+        enabled: true
+      discovery:
+        instanceZone: zone2
+        instance-id: "${spring.application.name}:${random.value}"
+        prefer-ip-address: true
+        # Unregister ghost services
+        #health-check-critical-timeout:
+
+---
+spring:
+  profiles: prod-zone1
+  cloud:
+    consul:
+      host: http://consul-server.consulpoc.svc.cluster.local
+      port: 8500
+      config:
+        enabled: true
+      discovery:
+        X-Config-Token: f6aebc5c-5be0-2485-a946-ab6c34332ae8
+        instanceZone: zone1
+        instance-id: "${spring.application.name}:${random.value}"
+        prefer-ip-address: true
+---
+spring:
+  profiles: prod-zone2
+  cloud:
+    consul:
+      host: http://consul-server.consul.svc.cluster.local:8500
+      config:
+        enabled: true
+      discovery:
+        instanceZone: zone2
+        instance-id: "${spring.application.name}:${random.value}"
+        prefer-ip-address: true
+        # Unregister ghost services
+        #health-check-critical-timeout:

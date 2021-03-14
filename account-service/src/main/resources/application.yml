@@ -1,0 +1,14 @@
+spring:
+  profiles:
+    active: "prod-zone1"
+  application:
+    name: myApp
+
+logging:
+  level:
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+    org.springframework.cloud.consul: DEBUG
+spring.cloud.consul.config.watch.enabled: true
+
+server.port: 9003
+#server.servlet.context-path=/
