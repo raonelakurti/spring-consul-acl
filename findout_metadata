@@ -1,0 +1,10 @@
+- name: Write VM metadata to var log vm info
+  shell: |
+    oci-metadata -j
+    if [[ $? -eq 0 ]]
+    then
+      oci-metadata -j >> /var/log/vmfo
+    else
+      curl -XGET http://169.254.169.254/opc/v1/instance/ >> /var/log/vminfo
+      curl -XGET http://169.254.169.254/opc/v1/vnics/ >> /var/log/vcninfo
+    fi
