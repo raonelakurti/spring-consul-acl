@@ -1,0 +1,22 @@
+#!/bin/bash
+AVAIL_DOMAIN=$(jq .availabilityDomain /var/log/vminfo | head -1 | sed 's/"//g')
+COMPARTMENT_ID=$(jq .compartmentId /var/log/vminfo | head -1 | sed 's/"//g')
+VM_OCID=$(jq .id /var/log/vminfo | head -1 | sed 's/"//g')
+VM_SHAPE=$(jq .shape /var/log/vminfo | head -1 | sed 's/"//g')
+VM_IP=$(jq -r '.[0]|.privateIp' /var/log/vcninfo)
+REGION=$(jq .canonicalRegionName /var/log/vminfo | head -1 | sed 's/"//g')
+FAULTDOMAIN=$(jq .faultDomain /var/log/vminfo | head -1 | sed 's/"//g')
+HOST_NAME=$(jq .hostname /var/log/vminfo | head -1 | sed 's/"//g')
+VNET_ID=$(jq -r '.[0]|.vnicId' /var/log/vcninfo)
+SUBNET_CIDR_BLOCK=$(jq -r '.[0]|.subnetCidrBlock' /var/log/vcninfo  | sed 's/"//g')
+
+sed -i "s/\bavailabilityDomain\b/& $AVAIL_DOMAIN/" /etc/td-agent-bit/td-agent-bit.conf
+sed -i "s/\bcompartmentId\b/& $COMPARTMENT_ID/" /etc/td-agent-bit/td-agent-bit.conf
+sed -i "s/\binstanceId\b/& $VM_OCID/" /etc/td-agent-bit/td-agent-bit.conf
+sed -i "s/\bvm_shape\b/& $VM_SHAPE/" /etc/td-agent-bit/td-agent-bit.conf
+sed -i "s/\bhost_ip\b/& $VM_IP/" /etc/td-agent-bit/td-agent-bit.conf
+sed -i "s/\boci_region\b/& $REGION/" /etc/td-agent-bit/td-agent-bit.conf
+sed -i "s/\bfaultDomain\b/& $FAULTDOMAIN/" /etc/td-agent-bit/td-agent-bit.conf
+sed -i "s/\bhostname\b/& $HOST_NAME/" /etc/td-agent-bit/td-agent-bit.conf
+sed -i "s/\bvnic_id\b/& $VNET_ID/" /etc/td-agent-bit/td-agent-bit.conf
+sed -i "s:\bsubnet_cidr\b/& $SUBNET_CIDR_BLOCK/" /etc/td-agent-bit/td-agent-bit.conf
