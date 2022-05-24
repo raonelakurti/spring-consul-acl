@@ -3,9 +3,9 @@
 - name: Push test data to Graphite
   hosts: 127.0.0.1
   connection: local
-  gather_facts: no
+  gather_facts: yes
   vars:
-    part_one: cicd.solr.fullindex
+    part_one: "cicd.solr.fullindex.{{ ansible_date_time.epoch }}"
     env: test
     type: main
     dc: mcc
@@ -17,12 +17,20 @@
   tasks:
     - shell: "expr $(date +%s) - {{ seconds_to_go_back|int }}"
       register: START_TIME
+    
+    #mine     
+    - debug:
+        var: START_TIME   
 
     - set_fact:
         # EXTRACT METRICS
         extract_status: >-
           {%- set dice = range(1, 100)|random -%}
           {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }}
+          
+    - debug:
+        var: extract_status  
+        
     - set_fact:
         extract_duration_sec: >-
           {%- if extract_status == 'fail_timeout' -%}
@@ -178,7 +186,7 @@
       with_items: "{{ metrics }}"
       tags:
         - push
-
+    
     - assert:
         that:
           - extract_status == 'success'
