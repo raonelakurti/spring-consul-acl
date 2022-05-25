@@ -18,18 +18,11 @@
     - shell: "expr $(date +%s) - {{ seconds_to_go_back|int }}"
       register: START_TIME
     
-    #mine     
-    - debug:
-        var: START_TIME   
-
     - set_fact:
         # EXTRACT METRICS
         extract_status: >-
           {%- set dice = range(1, 100)|random -%}
           {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }}
-          
-    - debug:
-        var: extract_status  
         
     - set_fact:
         extract_duration_sec: >-
