@@ -175,16 +175,6 @@
         index_tar_start_time: "{{ orch_start_time|int }}"
         cloud_deploy_start_time: "{{ orch_start_time|int + index_tar_duration_sec|int }}"
 
-    - set_fact:
-        fail_metrics:
-          - key: "{{ prefix }}.orch.metrics.duration"
-            value: "{{ orch_duration_sec|int }}"
-            timestamp: "{{orch_start_time|int + orch_duration_sec|int }}"
-          - key: "{{ prefix }}.orch.metrics.{{ index_tar_status }}"
-            timestamp: "{{ orch_start_time|int + orch_duration_sec|int }}"            
-          - key: "{{ prefix }}.orch.metrics.{{ cloud_deploy_status }}"
-            timestamp: "{{ orch_start_time|int + orch_duration_sec|int }}"
-
     - debug:
         msg: "All metric timestamps are for {{ days_to_go_back }} days ago"
 
@@ -210,10 +200,6 @@
             value: "{{ orch_duration_sec|int }}"
             timestamp: "{{orch_start_time|int + orch_duration_sec|int }}"  
 
-    - set_fact:
-        metrics: "{{ metrics + fail_metrics }}"
-      when: index_tar_status != 'success'
-
     - name: Display metrics
       debug:
         msg: "{{ item.timestamp }}: {{ item.key }}: {{ item.value|default('1') }}"
@@ -221,14 +207,14 @@
       tags:
         - display
 
-    #- name: Push metrics
-    #  labs_graphite:
-    #    key: "{{ item.key }}"
-    #    value: "{{ item.value|default(1) }}"
-    #    timestamp: "{{ item.timestamp }}"
-    #  with_items: "{{ metrics }}"
-    #  tags:
-    #    - push                        
+    - name: Push metrics
+      labs_graphite:
+        key: "{{ item.key }}"
+        value: "{{ item.value|default(1) }}"
+        timestamp: "{{ item.timestamp }}"
+      with_items: "{{ metrics }}"
+      tags:
+        - push                        
 
     - set_fact:
         wallflower_start_time: "{{ START_TIME.stdout|int + 300 }}"
@@ -282,14 +268,14 @@
       tags:
         - display
 
-    #- name: Push metrics
-    #  labs_graphite:
-    #    key: "{{ item.key }}"
-    #    value: "{{ item.value|default(1) }}"
-    #    timestamp: "{{ item.timestamp }}"
-    #  with_items: "{{ metrics }}"
-    #  tags:
-    #    - push
+    - name: Push metrics
+      labs_graphite:
+        key: "{{ item.key }}"
+        value: "{{ item.value|default(1) }}"
+        timestamp: "{{ item.timestamp }}"
+      with_items: "{{ metrics }}"
+      tags:
+        - push
     
     - assert:
         that:
@@ -329,14 +315,14 @@
       tags:
         - display
 
-    #- name: Push metrics
-    #  labs_graphite:
-    #    key: "{{ item.key }}"
-    #    value: "{{ item.value|default(1) }}"
-    #    timestamp: "{{ item.timestamp }}"
-    #  with_items: "{{ metrics }}"
-    #  tags:
-    #    - push
+    - name: Push metrics
+      labs_graphite:
+        key: "{{ item.key }}"
+        value: "{{ item.value|default(1) }}"
+        timestamp: "{{ item.timestamp }}"
+      with_items: "{{ metrics }}"
+      tags:
+        - push
 
     - assert:
         that:
@@ -369,14 +355,14 @@
       tags:
         - display
 
-    #- name: Push metrics
-    #  labs_graphite:
-    #    key: "{{ item.key }}"
-    #    value: "{{ item.value|default(1) }}"
-    #    timestamp: "{{ item.timestamp }}"
-    #  with_items: "{{ metrics }}"
-    #  tags:
-    #    - push
+    - name: Push metrics
+      labs_graphite:
+        key: "{{ item.key }}"
+        value: "{{ item.value|default(1) }}"
+        timestamp: "{{ item.timestamp }}"
+      with_items: "{{ metrics }}"
+      tags:
+        - push
 
     - assert:
         that:
@@ -404,14 +390,14 @@
       tags:
         - display
 
-    #- name: Push metrics
-    #  labs_graphite:
-    #    key: "{{ item.key }}"
-    #    value: "{{ item.value|default(1) }}"
-    #    timestamp: "{{ item.timestamp }}"
-    #  with_items: "{{ metrics }}"
-    #  tags:
-    #    - push
+    - name: Push metrics
+      labs_graphite:
+        key: "{{ item.key }}"
+        value: "{{ item.value|default(1) }}"
+        timestamp: "{{ item.timestamp }}"
+      with_items: "{{ metrics }}"
+      tags:
+        - push
 
     - assert:
         that:
