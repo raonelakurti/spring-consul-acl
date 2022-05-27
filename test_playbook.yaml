@@ -1,0 +1,452 @@
+---
+
+- name: Push test data to Graphite
+  hosts: 127.0.0.1
+  connection: local
+  gather_facts: yes
+  vars:
+    part_one: "cicd.solr.fullindex.{{ ansible_date_time.epoch }}"
+    env: dev
+    type: main
+    dc: mcc
+    prefix_extract: "{{ part_one }}.{{ env }}.{{ type }}.common"
+    prefix: "{{ part_one }}.{{ env }}.{{ type }}.{{ dc }}"
+    days_to_go_back: 7
+    seconds_to_go_back: "{{ 60 * 60 * 24 * days_to_go_back|int }}"
+  tasks:
+    - shell: "expr $(date +%s) - {{ seconds_to_go_back|int }}"
+      register: START_TIME
+
+    - set_fact:
+        full_index_status: 'success'
+        
+    - set_fact:
+        # EXTRACT METRICS
+        extract_status: >-
+          {%- set dice = range(1, 100)|random -%}
+          {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }}
+        
+    - set_fact:
+        extract_duration_sec: >-
+          {%- if extract_status == 'fail_timeout' -%}
+            {{ 10 * 60 * 60 }}
+          {%- elif extract_status == 'fail_error' -%}
+            {{ range(10, 390)|random * 60 }}
+          {%- else -%}
+            {{ range(390, 480)|random * 60 }}
+          {%- endif -%}
+
+        # METADATA METRICS
+        metadata_status: >-
+          {%- set dice = range(1, 100)|random -%}
+          {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }}
+          
+        # FI CATCH UP METRICS
+        fi_catchup_status: >-
+          {%- set dice = range(1, 100)|random -%}
+          {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }}
+    - set_fact:
+        metadata_duration_sec: >-
+          {%- if metadata_status == 'fail_timeout' -%}
+            {{ 4 * 60 * 60 }}
+          {%- elif metadata_status == 'fail_error' -%}
+            {{ range(10, 180)|random * 60 }}
+          {%- else -%}
+            {{ range(180, 240)|random * 60 }}
+          {%- endif -%}
+        fi_catchup_duration_sec: >-
+          {%- if fi_catchup_status == 'fail_timeout' -%}
+            {{ 10 * 60 * 60 }}
+          {%- elif fi_catchup_status == 'fail_error' -%}
+            {{ range(10, 300)|random * 60 }}
+          {%- else -%}
+            {{ range(300, 600)|random * 60 }}
+          {%- endif -%}
+
+        # NRT CATCHUP STATUS
+        nrt_catchup_status: >-
+          {%- set dice = range(1, 100)|random -%}
+          {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }}
+    - set_fact:
+        nrt_catchup_duration_sec: >-
+          {%- if nrt_catchup_status == 'fail_timeout' -%}
+            {{ 2 * 60 * 60 }}
+
+          {%- elif nrt_catchup_status == 'fail_error' -%}
+            {{ range(5, 90)|random * 60 }}
+          {%- else -%}
+            {{ range(90, 120)|random * 60 }}
+          {%- endif -%}
+
+        # OPTIMIZE STATUS
+        optimize_status: >-
+          {%- set dice = range(1, 100)|random -%}
+          {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }}
+    - set_fact:
+        optimize_duration_sec: >-
+          {%- if optimize_status == 'fail_timeout' -%}
+            {{ 4 * 60 * 60 }}
+          {%- elif optimize_status == 'fail_error' -%}
+            {{ range(5, 150)|random * 60 }}
+          {%- else -%}
+            {{ range(150, 180)|random * 60 }}
+          {%- endif -%}
+
+        # REGRESSION STATUS
+        regression_status: >-
+          {%- set dice = range(1, 100)|random -%}
+          {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }}
+    - set_fact:
+        regression_duration_sec: >-
+          {%- if regression_status == 'fail_timeout' -%}
+            {{ 4 * 60 * 60 }}
+          {%- elif regression_status == 'fail_error' -%}
+            {{ range(5, 150)|random * 60 }}
+          {%- else -%}
+            {{ range(150, 180)|random * 60 }}
+          {%- endif -%}
+
+        # WALLFLOWER OVERALL METRICS
+        wallflower_status: >-
+          {%- if fi_catchup_status != 'success' -%}
+            {{ fi_catchup_status }}
+          {%- elif nrt_catchup_status != 'success' -%}
+            {{ nrt_catchup_status }}
+          {%- elif optimize_status != 'success' -%}
+            {{ optimize_status }}
+          {%- elif regression_status != 'success' -%}
+            {{ regression_status }}
+          {%- else -%}
+             'success'
+          {%- endif -%}
+    - set_fact:
+        wallflower_duration_sec: >-
+          {%- if fi_catchup_status != 'success' -%}
+            {{ fi_catchup_duration_sec|int }}
+          {%- elif nrt_catchup_status != 'success' -%}
+            {{ fi_catchup_duration_sec|int + nrt_catchup_duration_sec|int }}
+          {%- elif optimize_status != 'success' -%}
+            {{ fi_catchup_duration_sec|int + nrt_catchup_duration_sec|int + optimize_duration_sec|int }}
+          {%- elif regression_status != 'success' -%}
+            {{ fi_catchup_duration_sec|int + nrt_catchup_duration_sec|int + optimize_duration_sec|int + regression_duration_sec|int }}
+          {%- else -%}
+            {{ range(600, 720)|random * 60 }}
+          {%- endif -%}
+
+        # Orchestration
+        # indextar status 
+        index_tar_status: >-
+          {%- set dice = range(1, 100)|random -%}
+          {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }} 
+    - set_fact:
+        index_tar_duration_sec: >-
+          {%- if  index_tar_status == 'fail_timeout' -%}
+            {{ 10 * 60 * 60 }}
+          {%- elif  index_tar_status == 'fail_error' -%}
+            {{ range(10, 600)|random * 60 }}
+          {%- else -%}
+            {{ range(600, 720)|random * 60 }}
+          {%- endif -%}
+        
+        # cloud deploy status 
+        cloud_deploy_status: >-
+          {%- set dice = range(1, 100)|random -%}
+          {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }}        
+    
+    - set_fact:
+        cloud_deploy_duration_sec: >-
+          {%- if  cloud_deploy_status == 'fail_timeout' -%}
+            {{ 10 * 60 * 60 }}
+          {%- elif  cloud_deploy_status == 'fail_error' -%}
+            {{ range(10, 600)|random * 60 }}
+          {%- else -%}
+            {{ range(600, 720)|random * 60 }}
+          {%- endif -%}
+  
+        # Orchestration OVERALL METRICS
+        orch_status: >-
+          {%- if index_tar_status != 'success' -%}
+            {{ index_tar_status }}
+          {%- elif cloud_deploy_status != 'success' -%}
+            {{ cloud_deploy_status }}
+          {%- else -%}
+             "success"
+          {%- endif -%}
+    
+    - set_fact:
+        orch_duration_sec: >-
+          {%- if index_tar_status != 'success' -%}
+            {{ index_tar_duration_sec|int }}
+          {%- elif cloud_deploy_status != 'success' -%}
+            {{ cloud_deploy_duration_sec|int + index_tar_duration_sec|int }}
+          {%- else -%}
+            {{ range(720, 900)|random * 60 }}
+          {%- endif -%}
+    
+
+
+
+    - set_fact:
+        metadata_start_time: "{{ START_TIME.stdout|int + extract_duration_sec|int }}"
+    - set_fact:
+        wallflower_start_time: "{{ metadata_start_time|int + 300 }}"
+    - set_fact:
+        fi_catchup_start_time: "{{ wallflower_start_time|int}}" ## wallflower_start_time & nrt_catchup_start_time are both same.
+        nrt_catchup_start_time: "{{ wallflower_start_time|int + fi_catchup_duration_sec|int }}"
+
+    - set_fact:
+        optimize_start_time: "{{ nrt_catchup_start_time|int + nrt_catchup_duration_sec|int }}"
+    - set_fact:
+        regression_start_time: "{{ optimize_start_time|int + optimize_duration_sec|int }}"     
+
+    - set_fact:
+        orch_start_time: "{{ wallflower_start_time|int  + wallflower_duration_sec|int }}"
+
+    - set_fact:          
+        index_tar_start_time: "{{ orch_start_time|int }}"
+        cloud_deploy_start_time: "{{ orch_start_time|int + index_tar_duration_sec|int }}"
+
+### ------ mapping all metrics for each job and stage
+### Extract
+    - set_fact:
+        extract_metrics:
+          - key: "{{ prefix_extract }}.extract.start"
+            timestamp: "{{ START_TIME.stdout }}"
+          - key: "{{ prefix_extract }}.extract.duration"
+            value: "{{ extract_duration_sec|int }}"
+            timestamp: "{{ START_TIME.stdout|int + extract_duration_sec|int }}"
+          - key: "{{ prefix_extract }}.extract.{{ extract_status }}"
+            timestamp: "{{ START_TIME.stdout|int + extract_duration_sec|int }}"
+    
+    - set_fact: 
+        full_index_status: "{{ extract_status }}"
+      when: 
+      - extract_status != "success"
+      - full_index_status == "success"
+
+    - set_fact:  
+        metrics: "{{extract_metrics}}"
+  
+### metadata
+    - set_fact:
+        metadata_metrics:
+          - key: "{{ prefix }}.metadata.start"
+            timestamp: "{{ metadata_start_time|int }}"
+          - key: "{{ prefix }}.metadata.duration"
+            value: "{{ metadata_duration_sec|int }}"
+            timestamp: "{{ metadata_duration_sec|int }}"
+          - key: "{{ prefix }}.metadata.{{ metadata_status }}"
+            timestamp: "{{ metadata_start_time|int + metadata_duration_sec|int }}"
+      when: 
+      - extract_status == "success"
+      - full_index_status == "success"
+    
+    - set_fact: 
+        full_index_status: "{{ metadata_status }}"
+      when: 
+      - metadata_status != "success"
+      - full_index_status == "success"
+
+    - set_fact:  
+        metrics: "{{metrics + metadata_metrics | default([]) }}"        
+
+### wallflower
+
+    # Catchup_fi metrics
+    - set_fact:
+        catchup_fi_metrics:
+        # total wall flower
+          - key: "{{ prefix }}.wallflower.metrics.start"
+            timestamp: "{{ wallflower_start_time|int}}"
+          - key: "{{ prefix }}.wallflower.metrics.duration"
+            value: "{{ wallflower_duration_sec|int }}"
+            timestamp: "{{ wallflower_start_time|int + wallflower_duration_sec|int }}"  
+          - key: "{{ prefix }}.wallflower.metrics.{{ wallflower_status }}"
+            timestamp: "{{ wallflower_start_time|int + wallflower_duration_sec|int }}"
+
+          # cathcup  
+          - key: "{{ prefix }}.wallflower.steps.catchup_fi.start"
+            timestamp: "{{ wallflower_start_time|int}}"    
+          - key: "{{ prefix }}.wallflower.steps.catchup_fi.duration"
+            value: "{{ fi_catchup_duration_sec|int}}"
+            timestamp: "{{ wallflower_start_time|int + fi_catchup_duration_sec|int}}" 
+          - key: "{{ prefix }}.wallflower.steps.catchup_fi.{{fi_catchup_status}}"
+            timestamp: "{{ wallflower_start_time|int + fi_catchup_duration_sec|int}}"
+      when: 
+      - metadata_status == "success"
+      - full_index_status == "success"
+
+    - set_fact: 
+        full_index_status: "{{ fi_catchup_status }}"
+      when: 
+      - fi_catchup_status != "success"
+      - full_index_status == "success"     
+
+    # Catchup_nrt metrics
+    - set_fact:
+        catchup_nrt_metrics:
+          - key: "{{ prefix }}.wallflower.steps.catchup_nrt.start"
+            timestamp: "{{ nrt_catchup_start_time|int }}"    
+          - key: "{{ prefix }}.wallflower.steps.catchup_nrt.duration"
+            value: "{{ nrt_catchup_duration_sec|int }}"
+            timestamp: "{{ nrt_catchup_start_time|int + nrt_catchup_duration_sec|int }}" 
+          - key: "{{ prefix }}.wallflower.steps.catchup_nrt.{{nrt_catchup_status}}"
+            timestamp: "{{ nrt_catchup_start_time|int + nrt_catchup_duration_sec|int }}"
+      when: 
+      - fi_catchup_status == "success"
+      - full_index_status == "success" 
+        
+    - set_fact: 
+        full_index_status: "{{ nrt_catchup_status }}"
+      when: 
+      - nrt_catchup_status != "success"
+      - full_index_status == "success"
+
+    # optimize metrics
+    - set_fact:
+        optimize_metrics:
+          - key: "{{ prefix }}.wallflower.steps.optimize.start"
+            timestamp: "{{ optimize_start_time|int }}"    
+          - key: "{{ prefix }}.wallflower.steps.optimize.duration"
+            value: "{{ optimize_duration_sec|int }}"
+            timestamp: "{{ optimize_start_time|int + optimize_duration_sec|int }}" 
+          - key: "{{ prefix }}.wallflower.steps.optimize.{{optimize_status}}"
+            timestamp: "{{ optimize_start_time|int + optimize_duration_sec|int }}"
+      when: 
+      - nrt_catchup_status == "success"
+      - full_index_status == "success" 
+
+    - set_fact: 
+        full_index_status: "{{ optimize_status }}"
+      when: 
+      - optimize_status != "success"
+      - full_index_status == "success"
+
+    # Regression metrics
+    - set_fact:
+        regression_metrics:
+          - key: "{{ prefix }}.wallflower.steps.regression.start"
+            timestamp: "{{ regression_start_time|int }}"    
+          - key: "{{ prefix }}.wallflower.steps.regression.duration"
+            value: "{{ regression_duration_sec|int }}"
+            timestamp: "{{ regression_start_time|int + regression_duration_sec|int }}" 
+          - key: "{{ prefix }}.wallflower.steps.regression.{{regression_status}}"
+            timestamp: "{{ regression_start_time|int + regression_duration_sec|int }}"
+      when: 
+      - optimize_status == "success"
+      - full_index_status == "success" 
+
+    - set_fact: 
+        full_index_status: "{{ regression_status }}"
+      when: 
+      - regression_status != "success"
+      - full_index_status == "success"     
+
+    - set_fact:  
+        metrics: "{{metrics + catchup_fi_metrics | default([]) + catchup_nrt_metrics | default([]) + optimize_metrics | default([]) + regression_metrics | default([]) }}"                    
+
+### Orchestration
+
+    - set_fact:
+        index_tar_metrics:
+        # Orach total metrics
+          - key: "{{ prefix }}.orch.metrics.start"
+            timestamp: "{{ orch_start_time|int }}"
+          - key: "{{ prefix }}.orch.metrics.duration"
+            value: "{{ orch_duration_sec|int }}"
+            timestamp: "{{orch_start_time|int + orch_duration_sec|int }}"
+          - key: "{{ prefix }}.orch.metrics.{{orch_status}}"
+            timestamp: "{{orch_start_time|int + orch_duration_sec|int }}"  
+        # index_tar  
+          - key: "{{ prefix }}.orch.steps.index_tar.start"
+            timestamp: "{{ orch_start_time|int }}"
+          - key: "{{ prefix }}.orch.steps.index_tar.duration"
+            value: "{{ index_tar_duration_sec|int }}"
+            timestamp: "{{ orch_start_time|int + index_tar_duration_sec|int }}"  
+          - key: "{{ prefix }}.orch.steps.index_tar.{{index_tar_status}}"
+            timestamp: "{{ orch_start_time|int + index_tar_duration_sec|int }}"  
+      when:
+      - regression_status == "success"
+      - full_index_status == "success"
+
+    - set_fact: 
+        full_index_status: "{{ index_tar_status }}"
+      when: 
+      - index_tar_status != "success"
+      - full_index_status == "success"      
+
+    - set_fact:
+        cloud_deploy_metrics:        
+          - key: "{{ prefix }}.orch.steps.cloud_deploy.start"
+            timestamp: "{{ cloud_deploy_start_time|int }}"
+          - key: "{{ prefix }}.orch.steps.cloud_deploy.duration"
+            value: "{{ orch_duration_sec|int }}"
+            timestamp: "{{ orch_start_time|int + orch_duration_sec|int }}"
+          - key: "{{ prefix }}.orch.steps.cloud_deploy.{{cloud_deploy_status}}"
+            timestamp: "{{ orch_start_time|int + orch_duration_sec|int }}"    
+      when:
+      - index_tar_status == "success"
+      - full_index_status == "success"
+
+    - set_fact: 
+        full_index_status: "{{ cloud_deploy_status }}"
+      when: 
+      - cloud_deploy_status != "success"
+      - full_index_status == "success"        
+
+    - set_fact:  
+        metrics: "{{metrics + index_tar_metrics | default([]) + cloud_deploy_metrics | default([]) }}"
+
+ ### flush full index metrics to graphite
+
+    - name: Display metrics
+      debug:
+        msg: "{{ item.key}} {{ item.value|default('1') }} {{ item.timestamp }}"
+      with_items: "{{ metrics }}"
+      tags:
+        - display
+
+    - name: Push metrics
+      labs_graphite:
+        key: "{{ item.key }}"
+        value: "{{ item.value|default(1) }}"
+        timestamp: "{{ item.timestamp }}"
+      with_items: "{{ metrics }}"
+      tags:
+        - push
+
+  ### only full index metrics
+    - assert:
+        that:
+          - "'success' in full_index_status"
+        fail_msg: "Full index failed with status [{{ full_index_status }}]" 
+
+    - set_fact:           
+        full_index_duration: "{{ extract_duration_sec|int + metadata_duration_sec|int + wallflower_duration_sec|int + orch_duration_sec|int  }}"
+        full_index_start: "{{ START_TIME.stdout }}"
+
+    - set_fact:
+        metrics:        
+          - key: "{{ prefix }}.fullindex.start"
+            timestamp: "{{ full_index_start|int }}"
+          - key: "{{ prefix }}.fullindex.duration"
+            value: "{{ full_index_duration|int }}"
+            timestamp: "{{ orch_start_time|int + orch_duration_sec|int }}"
+          - key: "{{ prefix }}.fullindex.{{full_index_status}}"
+            timestamp: "{{ orch_start_time|int + orch_duration_sec|int }}" 
+    
+    - name: Display metrics
+      debug:
+        msg: "{{ item.key}} {{ item.value|default('1') }} {{ item.timestamp }}"
+      with_items: "{{ metrics }}"
+      tags:
+        - display
+
+    - name: Push metrics
+      labs_graphite:
+        key: "{{ item.key }}"
+        value: "{{ item.value|default(1) }}"
+        timestamp: "{{ item.timestamp }}"
+      with_items: "{{ metrics }}"
+      tags:
+        - push                              
