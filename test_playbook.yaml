@@ -117,7 +117,7 @@
           {%- elif regression_status != 'success' -%}
             {{ regression_status }}
           {%- else -%}
-             "success"
+             'success'
           {%- endif -%}
     - set_fact:
         wallflower_duration_sec: >-
