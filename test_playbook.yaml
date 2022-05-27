@@ -18,7 +18,7 @@
       register: START_TIME
 
     - set_fact:
-        full_index_status: "success"
+        full_index_status: 'success'
         
     - set_fact:
         # EXTRACT METRICS
@@ -207,8 +207,6 @@
         cloud_deploy_start_time: "{{ orch_start_time|int + index_tar_duration_sec|int }}"
 
 ### ------ mapping all metrics for each job and stage
-
-
 ### Extract
     - set_fact:
         extract_metrics:
@@ -225,10 +223,10 @@
       when: 
       - extract_status != "success"
       - full_index_status == "success"
+
     - set_fact:  
         metrics: "{{extract_metrics}}"
   
-
 ### metadata
     - set_fact:
         metadata_metrics:
@@ -274,9 +272,9 @@
             timestamp: "{{ wallflower_start_time|int + fi_catchup_duration_sec|int}}" 
           - key: "{{ prefix }}.wallflower.steps.catchup_fi.{{fi_catchup_status}}"
             timestamp: "{{ wallflower_start_time|int + fi_catchup_duration_sec|int}}"
-        when: 
-        - metadata_status == "success"
-        - full_index_status == "success"
+      when: 
+      - metadata_status == "success"
+      - full_index_status == "success"
 
     - set_fact: 
         full_index_status: "{{ fi_catchup_status }}"
@@ -294,9 +292,9 @@
             timestamp: "{{ nrt_catchup_start_time|int + nrt_catchup_duration_sec|int }}" 
           - key: "{{ prefix }}.wallflower.steps.catchup_nrt.{{nrt_catchup_status}}"
             timestamp: "{{ nrt_catchup_start_time|int + nrt_catchup_duration_sec|int }}"
-        when: 
-        - fi_catchup_status == "success"
-        - full_index_status == "success" 
+      when: 
+      - fi_catchup_status == "success"
+      - full_index_status == "success" 
         
     - set_fact: 
         full_index_status: "{{ nrt_catchup_status }}"
@@ -314,9 +312,9 @@
             timestamp: "{{ optimize_start_time|int + optimize_duration_sec|int }}" 
           - key: "{{ prefix }}.wallflower.steps.optimize.{{optimize_status}}"
             timestamp: "{{ optimize_start_time|int + optimize_duration_sec|int }}"
-        when: 
-        - nrt_catchup_status == "success"
-        - full_index_status == "success" 
+      when: 
+      - nrt_catchup_status == "success"
+      - full_index_status == "success" 
 
     - set_fact: 
         full_index_status: "{{ optimize_status }}"
@@ -334,9 +332,9 @@
             timestamp: "{{ regression_start_time|int + regression_duration_sec|int }}" 
           - key: "{{ prefix }}.wallflower.steps.regression.{{regression_status}}"
             timestamp: "{{ regression_start_time|int + regression_duration_sec|int }}"
-        when: 
-        - optimize_status == "success"
-        - full_index_status == "success" 
+      when: 
+      - optimize_status == "success"
+      - full_index_status == "success" 
 
     - set_fact: 
         full_index_status: "{{ regression_status }}"
@@ -357,7 +355,7 @@
           - key: "{{ prefix }}.orch.metrics.duration"
             value: "{{ orch_duration_sec|int }}"
             timestamp: "{{orch_start_time|int + orch_duration_sec|int }}"
-          - key: "{{ prefix }}.orch.metrics.status.{{orch_status}}"
+          - key: "{{ prefix }}.orch.metrics.{{orch_status}}"
             timestamp: "{{orch_start_time|int + orch_duration_sec|int }}"  
         # index_tar  
           - key: "{{ prefix }}.orch.steps.index_tar.start"
