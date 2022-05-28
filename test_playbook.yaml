@@ -25,7 +25,6 @@
         extract_status: >-
           {%- set dice = range(1, 100)|random -%}
           {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }}
-        
     - set_fact:
         extract_duration_sec: >-
           {%- if extract_status == 'fail_timeout' -%}
@@ -66,12 +65,14 @@
         # NRT CATCHUP STATUS
         nrt_catchup_status: >-
           {%- set dice = range(1, 100)|random -%}
-          {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }}
+          {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }}               
+    - debug:
+        var: nrt_catchup_status
+
     - set_fact:
         nrt_catchup_duration_sec: >-
           {%- if nrt_catchup_status == 'fail_timeout' -%}
             {{ 2 * 60 * 60 }}
-
           {%- elif nrt_catchup_status == 'fail_error' -%}
             {{ range(5, 90)|random * 60 }}
           {%- else -%}
@@ -117,7 +118,7 @@
           {%- elif regression_status != 'success' -%}
             {{ regression_status }}
           {%- else -%}
-             'success'
+             success
           {%- endif -%}
     - set_fact:
         wallflower_duration_sec: >-
@@ -137,7 +138,7 @@
         # indextar status 
         index_tar_status: >-
           {%- set dice = range(1, 100)|random -%}
-          {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }} 
+          {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }}
     - set_fact:
         index_tar_duration_sec: >-
           {%- if  index_tar_status == 'fail_timeout' -%}
@@ -151,8 +152,7 @@
         # cloud deploy status 
         cloud_deploy_status: >-
           {%- set dice = range(1, 100)|random -%}
-          {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }}        
-    
+          {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }}
     - set_fact:
         cloud_deploy_duration_sec: >-
           {%- if  cloud_deploy_status == 'fail_timeout' -%}
@@ -170,9 +170,10 @@
           {%- elif cloud_deploy_status != 'success' -%}
             {{ cloud_deploy_status }}
           {%- else -%}
-             "success"
-          {%- endif -%}
-    
+             success
+          {%- endif -%}  
+    - debug:
+         var: orch_status 
     - set_fact:
         orch_duration_sec: >-
           {%- if index_tar_status != 'success' -%}
@@ -182,10 +183,7 @@
           {%- else -%}
             {{ range(720, 900)|random * 60 }}
           {%- endif -%}
-    
-
-
-
+  
     - set_fact:
         metadata_start_time: "{{ START_TIME.stdout|int + extract_duration_sec|int }}"
     - set_fact:
@@ -205,6 +203,19 @@
     - set_fact:          
         index_tar_start_time: "{{ orch_start_time|int }}"
         cloud_deploy_start_time: "{{ orch_start_time|int + index_tar_duration_sec|int }}"
+
+    - set_fact: 
+        extract_status: "{{extract_status | trim}}"
+        metadata_status: "{{ metadata_status | trim}}"
+        fi_catchup_status: "{{ fi_catchup_status | trim}}"
+        nrt_catchup_status : "{{ nrt_catchup_status | trim}}"   
+        optimize_status : "{{ optimize_status | trim}}" 
+        regression_status  : "{{ regression_status | trim}}"
+        wallflower_status : "{{ wallflower_status | trim}}"    
+        index_tar_status : "{{ index_tar_status | trim}}"
+        cloud_deploy_status : "{{ cloud_deploy_status | trim}}"
+        orch_status : "{{ orch_status | trim}}"    
+        full_index_status : "{{ full_index_status | trim}}" 
 
 ### ------ mapping all metrics for each job and stage
 ### Extract
@@ -346,7 +357,8 @@
         metrics: "{{metrics + catchup_fi_metrics | default([]) + catchup_nrt_metrics | default([]) + optimize_metrics | default([]) + regression_metrics | default([]) }}"                    
 
 ### Orchestration
-
+    - debug: 
+        var: orch_status
     - set_fact:
         index_tar_metrics:
         # Orach total metrics
@@ -392,10 +404,17 @@
         full_index_status: "{{ cloud_deploy_status }}"
       when: 
       - cloud_deploy_status != "success"
-      - full_index_status == "success"        
+      - full_index_status == "success" 
+
+    - set_fact:
+        full_index_metrics:        
+          - key: "{{ prefix }}.fullindex.{{full_index_status}}"
+            timestamp: "{{ orch_start_time|int + orch_duration_sec|int }}"         
 
     - set_fact:  
-        metrics: "{{metrics + index_tar_metrics | default([]) + cloud_deploy_metrics | default([]) }}"
+        metrics: "{{metrics + index_tar_metrics | default([]) + cloud_deploy_metrics | default([]) + full_index_metrics | default([]) }}"
+
+     
 
  ### flush full index metrics to graphite
 
