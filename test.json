@@ -22,14 +22,15 @@
     ]
   },
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2546,
-  "iteration": 1654194033087,
+  "id": 5,
+  "iteration": 1654196633958,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
-      "collapsed": false,
+      "collapsed": true,
       "datasource": {
         "type": "graphite",
         "uid": "GsHRwjXnk"
@@ -41,1188 +42,103 @@
         "y": 0
       },
       "id": 10,
-      "panels": [],
-      "title": "Full Index",
-      "type": "row"
-    },
-    {
-      "datasource": null,
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {},
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "light-blue",
-                "value": null
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 4,
-        "x": 0,
-        "y": 1
-      },
-      "id": 62,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "7.1.5",
-      "targets": [
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "refId": "A",
-          "target": "alias(keepLastValue(cicd.solr.fullindex.$env.main.mcc.fullindex.duration), 'FI_Last_Duration')",
-          "textEditor": false
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Total FI Last Duration",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {},
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "light-blue",
-                "value": null
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 13,
-        "x": 4,
-        "y": 1
-      },
-      "id": 64,
-      "options": {
-        "displayMode": "lcd",
-        "minVizHeight": 8,
-        "minVizWidth": 0,
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "text": {}
-      },
-      "pluginVersion": "7.1.5",
-      "targets": [
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "refCount": 0,
-          "refId": "A",
-          "target": "alias(cicd.solr.fullindex.$env.main.common.extract.duration, 'extract')",
-          "textEditor": false
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "hide": false,
-          "refCount": 0,
-          "refId": "B",
-          "target": "alias(cicd.solr.fullindex.$env.main.mcc.metadata.duration, 'metadata')",
-          "textEditor": false
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "hide": false,
-          "refCount": 0,
-          "refId": "C",
-          "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.metrics.duration, 'wall_flower')",
-          "textEditor": false
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "hide": false,
-          "refCount": 0,
-          "refId": "D",
-          "target": "alias(keepLastValue(cicd.solr.fullindex.$env.main.mcc.orch.metrics.duration), 'orchestration')",
-          "textEditor": false
-        }
-      ],
-      "title": "FI Components Last  Duration",
-      "type": "bargauge"
-    },
-    {
-      "aliasColors": {},
-      "breakPoint": "50%",
-      "cacheTimeout": null,
-      "combine": {
-        "label": "Others",
-        "threshold": 0
-      },
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
-          "mappings": []
-        },
-        "overrides": []
-      },
-      "fontSize": "80%",
-      "format": "short",
-      "gridPos": {
-        "h": 10,
-        "w": 7,
-        "x": 17,
-        "y": 1
-      },
-      "id": 8,
-      "interval": null,
-      "legend": {
-        "show": true,
-        "values": true
-      },
-      "legendType": "Under graph",
-      "links": [],
-      "nullPointMode": "connected",
-      "pieType": "pie",
-      "pluginVersion": "7.1.5",
-      "strokeWidth": 1,
-      "targets": [
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "GsHRwjXnk"
-          },
-          "hide": false,
-          "refCount": 0,
-          "refId": "A",
-          "target": "alias(countSeries(cicd.solr.fullindex.$env.main.mcc.fullindex.success), 'success')",
-          "textEditor": true
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "GsHRwjXnk"
-          },
-          "refCount": 0,
-          "refId": "C",
-          "target": "alias(countSeries(cicd.solr.fullindex.$env.main.mcc.fullindex.fail*), 'fail')",
-          "textEditor": true
-        }
-      ],
-      "title": "FI Success/Fail Ratio",
-      "type": "grafana-piechart-panel",
-      "valueName": "current"
-    },
-    {
-      "datasource": null,
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {},
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "light-blue",
-                "value": null
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 4,
-        "x": 0,
-        "y": 11
-      },
-      "id": 56,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "mean"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "7.1.5",
-      "targets": [
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "refId": "A",
-          "target": "alias(cicd.solr.fullindex.$env.main.mcc.fullindex.duration, 'fullIndex')",
-          "textEditor": false
-        }
-      ],
-      "title": "FI Average Duration",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {},
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "light-blue",
-                "value": null
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 20,
-        "x": 4,
-        "y": 11
-      },
-      "id": 50,
-      "options": {
-        "displayMode": "lcd",
-        "minVizHeight": 8,
-        "minVizWidth": 0,
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "mean"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "text": {}
-      },
-      "pluginVersion": "7.1.5",
-      "targets": [
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "refCount": 0,
-          "refId": "A",
-          "target": "alias(cicd.solr.fullindex.$env.main.common.extract.duration, 'extract')",
-          "textEditor": false
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "hide": false,
-          "refCount": 0,
-          "refId": "B",
-          "target": "alias(cicd.solr.fullindex.$env.main.mcc.metadata.duration, 'metadata')",
-          "textEditor": false
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "hide": false,
-          "refCount": 0,
-          "refId": "C",
-          "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.metrics.duration, 'wall_flower')",
-          "textEditor": false
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "hide": false,
-          "refCount": 0,
-          "refId": "D",
-          "target": "alias(cicd.solr.fullindex.$env.main.mcc.orch.metrics.duration, 'orchestration')",
-          "textEditor": false
-        }
-      ],
-      "title": "FI components Average Duration",
-      "type": "bargauge"
-    },
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 21
-      },
-      "id": 18,
-      "panels": [],
-      "title": "Extract",
-      "type": "row"
-    },
-    {
-      "cards": {
-        "cardPadding": null,
-        "cardRound": null
-      },
-      "color": {
-        "cardColor": "#b4ff00",
-        "colorScale": "sqrt",
-        "colorScheme": "interpolateBlues",
-        "exponent": 0.5,
-        "min": 1,
-        "mode": "spectrum"
-      },
-      "dataFormat": "timeseries",
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 11,
-        "w": 17,
-        "x": 0,
-        "y": 22
-      },
-      "heatmap": {},
-      "hideZeroBuckets": false,
-      "highlightCards": true,
-      "id": 13,
-      "legend": {
-        "show": false
-      },
-      "pluginVersion": "7.1.5",
-      "reverseYBuckets": false,
-      "targets": [
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "GsHRwjXnk"
-          },
-          "refId": "A",
-          "target": "cicd.solr.fullindex.$env.main.common.extract.duration",
-          "textEditor": false
-        }
-      ],
-      "title": "Extract Duration",
-      "tooltip": {
-        "show": true,
-        "showHistogram": false
-      },
-      "type": "heatmap",
-      "xAxis": {
-        "show": true
-      },
-      "xBucketNumber": null,
-      "xBucketSize": null,
-      "yAxis": {
-        "decimals": null,
-        "format": "s",
-        "logBase": 1,
-        "max": null,
-        "min": null,
-        "show": true,
-        "splitFactor": null
-      },
-      "yBucketBound": "auto",
-      "yBucketNumber": null,
-      "yBucketSize": null
-    },
-    {
-      "aliasColors": {},
-      "breakPoint": "50%",
-      "cacheTimeout": null,
-      "combine": {
-        "label": "Others",
-        "threshold": 0
-      },
-      "datasource": null,
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
-          "mappings": []
-        },
-        "overrides": []
-      },
-      "fontSize": "80%",
-      "format": "short",
-      "gridPos": {
-        "h": 11,
-        "w": 7,
-        "x": 17,
-        "y": 22
-      },
-      "id": 26,
-      "interval": null,
-      "legend": {
-        "show": true,
-        "values": true
-      },
-      "legendType": "Under graph",
-      "links": [],
-      "nullPointMode": "connected",
-      "pieType": "pie",
-      "strokeWidth": 1,
-      "targets": [
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "GsHRwjXnk"
-          },
-          "refCount": 0,
-          "refId": "A",
-          "target": "alias(countSeries(cicd.solr.fullindex.dev1.main.mcc.metadata.success), 'success')",
-          "textEditor": false
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "GsHRwjXnk"
-          },
-          "hide": false,
-          "refCount": 0,
-          "refId": "B",
-          "target": "alias(countSeries(cicd.solr.fullindex.$env.main.mcc.metadata.fail_*), 'fail')",
-          "textEditor": false
-        }
-      ],
-      "title": "Extract Success/Fail Ratio",
-      "type": "grafana-piechart-panel",
-      "valueName": "current"
-    },
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 33
-      },
-      "id": 20,
-      "panels": [],
-      "title": "Meta Data",
-      "type": "row"
-    },
-    {
-      "cards": {
-        "cardPadding": null,
-        "cardRound": null
-      },
-      "color": {
-        "cardColor": "#b4ff00",
-        "colorScale": "sqrt",
-        "colorScheme": "interpolateBlues",
-        "exponent": 0.5,
-        "max": null,
-        "min": 1,
-        "mode": "spectrum"
-      },
-      "dataFormat": "timeseries",
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 17,
-        "x": 0,
-        "y": 34
-      },
-      "heatmap": {},
-      "hideZeroBuckets": false,
-      "highlightCards": true,
-      "id": 70,
-      "legend": {
-        "show": false
-      },
-      "pluginVersion": "7.1.5",
-      "reverseYBuckets": false,
-      "targets": [
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "GsHRwjXnk"
-          },
-          "refId": "A",
-          "target": "cicd.solr.fullindex.$env.main.mcc.metadata.duration",
-          "textEditor": false
-        }
-      ],
-      "title": "Metadata Duration",
-      "tooltip": {
-        "show": true,
-        "showHistogram": false
-      },
-      "tooltipDecimals": null,
-      "type": "heatmap",
-      "xAxis": {
-        "show": true
-      },
-      "xBucketNumber": null,
-      "xBucketSize": null,
-      "yAxis": {
-        "decimals": null,
-        "format": "s",
-        "logBase": 1,
-        "max": null,
-        "min": null,
-        "show": true,
-        "splitFactor": null
-      },
-      "yBucketBound": "auto",
-      "yBucketNumber": null,
-      "yBucketSize": null
-    },
-    {
-      "aliasColors": {},
-      "breakPoint": "50%",
-      "cacheTimeout": null,
-      "combine": {
-        "label": "Others",
-        "threshold": 0
-      },
-      "datasource": null,
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
-          "mappings": []
-        },
-        "overrides": []
-      },
-      "fontSize": "80%",
-      "format": "short",
-      "gridPos": {
-        "h": 9,
-        "w": 7,
-        "x": 17,
-        "y": 34
-      },
-      "id": 32,
-      "interval": null,
-      "legend": {
-        "show": true,
-        "values": true
-      },
-      "legendType": "Under graph",
-      "links": [],
-      "nullPointMode": "connected",
-      "pieType": "pie",
-      "strokeWidth": 1,
-      "targets": [
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "GsHRwjXnk"
-          },
-          "refCount": 0,
-          "refId": "A",
-          "target": "alias(countSeries(cicd.solr.fullindex.$env.main.mcc.metadata.success), 'success')",
-          "textEditor": true
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "GsHRwjXnk"
-          },
-          "hide": false,
-          "refCount": 0,
-          "refId": "B",
-          "target": "alias(countSeries(cicd.solr.fullindex.$env.main.mcc.metadata.fail_*), 'fail')",
-          "textEditor": true
-        }
-      ],
-      "title": "Extract Success/Fail Ratio",
-      "type": "grafana-piechart-panel",
-      "valueName": "current"
-    },
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 43
-      },
-      "id": 22,
-      "panels": [],
-      "title": "Wall flower",
-      "type": "row"
-    },
-    {
-      "datasource": null,
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {},
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "light-blue",
-                "value": null
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 4,
-        "x": 0,
-        "y": 44
-      },
-      "id": 66,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "7.1.5",
-      "targets": [
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "refId": "A",
-          "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.metrics.duration, 'wallflower')",
-          "textEditor": false
-        }
-      ],
-      "title": "Wall flower Last Duration",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {},
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "light-blue",
-                "value": null
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 13,
-        "x": 4,
-        "y": 44
-      },
-      "id": 36,
-      "options": {
-        "displayMode": "lcd",
-        "minVizHeight": 8,
-        "minVizWidth": 0,
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "text": {}
-      },
-      "pluginVersion": "7.1.5",
-      "targets": [
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "refCount": 0,
-          "refId": "A",
-          "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.steps.catchup_fi.duration, 'catchup_fi')",
-          "textEditor": false
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "hide": false,
-          "refCount": 0,
-          "refId": "B",
-          "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.steps.catchup_nrt.duration, 'catchup_nrt')",
-          "textEditor": false
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "hide": false,
-          "refCount": 0,
-          "refId": "C",
-          "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.steps.optimize.duration, 'optimize')",
-          "textEditor": false
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "hide": false,
-          "refCount": 0,
-          "refId": "D",
-          "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.steps.regression.duration, 'regression')",
-          "textEditor": false
-        }
-      ],
-      "title": "Wall flower stages  Last  Duration",
-      "type": "bargauge"
-    },
-    {
-      "aliasColors": {},
-      "breakPoint": "50%",
-      "cacheTimeout": null,
-      "combine": {
-        "label": "Others",
-        "threshold": 0
-      },
-      "datasource": null,
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
-          "mappings": []
-        },
-        "overrides": []
-      },
-      "fontSize": "80%",
-      "format": "short",
-      "gridPos": {
-        "h": 10,
-        "w": 7,
-        "x": 17,
-        "y": 44
-      },
-      "id": 38,
-      "interval": null,
-      "legend": {
-        "show": true,
-        "values": true
-      },
-      "legendType": "Under graph",
-      "links": [],
-      "nullPointMode": "connected",
-      "pieType": "pie",
-      "strokeWidth": 1,
-      "targets": [
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "refCount": 0,
-          "refId": "A",
-          "target": "alias(countSeries(cicd.solr.fullindex.$env.main.mcc.wallflower.metrics.success), 'success')",
-          "textEditor": true
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "hide": false,
-          "refCount": 0,
-          "refId": "B",
-          "target": "alias(countSeries(cicd.solr.fullindex.$env.main.mcc.wallflower.metrics.fail*), 'fail')",
-          "textEditor": true
-        }
-      ],
-      "title": "Wall Flower Success/Fail Ratio",
-      "type": "grafana-piechart-panel",
-      "valueName": "current"
-    },
-    {
-      "datasource": null,
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {},
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "light-blue",
-                "value": null
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 4,
-        "x": 0,
-        "y": 54
-      },
-      "id": 58,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "mean"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "7.1.5",
-      "targets": [
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "refId": "A",
-          "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.metrics.duration, 'fullIndex')",
-          "textEditor": false
-        }
-      ],
-      "title": "Wall flower  Average Duration",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {},
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "light-blue",
-                "value": null
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 20,
-        "x": 4,
-        "y": 54
-      },
-      "id": 67,
-      "options": {
-        "displayMode": "lcd",
-        "minVizHeight": 8,
-        "minVizWidth": 0,
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "mean"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "text": {}
-      },
-      "pluginVersion": "7.1.5",
-      "targets": [
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "refCount": 0,
-          "refId": "A",
-          "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.steps.catchup_fi.duration, 'catchup_fi')",
-          "textEditor": false
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "hide": false,
-          "refCount": 0,
-          "refId": "B",
-          "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.steps.catchup_nrt.duration, 'catchup_nrt')",
-          "textEditor": false
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "hide": false,
-          "refCount": 0,
-          "refId": "C",
-          "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.steps.optimize.duration, 'optimize')",
-          "textEditor": false
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "hide": false,
-          "refCount": 0,
-          "refId": "D",
-          "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.steps.regression.duration, 'regression')",
-          "textEditor": false
-        }
-      ],
-      "title": "Wall flower stages  Average Duration",
-      "type": "bargauge"
-    },
-    {
-      "cards": {
-        "cardPadding": null,
-        "cardRound": null
-      },
-      "color": {
-        "cardColor": "#b4ff00",
-        "colorScale": "sqrt",
-        "colorScheme": "interpolateBlues",
-        "exponent": 0.5,
-        "min": 1,
-        "mode": "spectrum"
-      },
-      "dataFormat": "timeseries",
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 24,
-        "x": 0,
-        "y": 64
-      },
-      "heatmap": {},
-      "hideZeroBuckets": false,
-      "highlightCards": true,
-      "id": 48,
-      "legend": {
-        "show": false
-      },
-      "reverseYBuckets": false,
-      "targets": [
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "WWW4_h97z"
-          },
-          "refId": "A",
-          "target": "cicd.solr.fullindex.$env.main.mcc.wallflower.metrics.duration",
-          "textEditor": true
-        }
-      ],
-      "title": "WallFlower Duration",
-      "tooltip": {
-        "show": true,
-        "showHistogram": false
-      },
-      "type": "heatmap",
-      "xAxis": {
-        "show": true
-      },
-      "xBucketNumber": null,
-      "xBucketSize": null,
-      "yAxis": {
-        "decimals": null,
-        "format": "s",
-        "logBase": 1,
-        "max": null,
-        "min": null,
-        "show": true,
-        "splitFactor": null
-      },
-      "yBucketBound": "auto",
-      "yBucketNumber": null,
-      "yBucketSize": null
-    },
-    {
-      "collapsed": true,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 73
-      },
-      "id": 24,
       "panels": [
         {
-          "datasource": null,
-          "description": "",
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "thresholds"
               },
-              "custom": {},
+              "mappings": [
+                {
+                  "options": {
+                    "1": {
+                      "color": "green",
+                      "index": 0,
+                      "text": "Yes"
+                    }
+                  },
+                  "type": "value"
+                },
+                {
+                  "options": {
+                    "match": "null+nan",
+                    "result": {
+                      "color": "red",
+                      "index": 1,
+                      "text": "No"
+                    }
+                  },
+                  "type": "special"
+                }
+              ],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 5,
+            "x": 0,
+            "y": 9
+          },
+          "id": 72,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.5.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "refId": "A",
+              "target": "cicd.solr.fullindex.$env.main.mcc.fullindex.success",
+              "textEditor": false
+            }
+          ],
+          "timeFrom": "24h",
+          "title": "FI happend today",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
@@ -1230,22 +146,25 @@
                   {
                     "color": "green",
                     "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "s"
+              }
             },
             "overrides": []
           },
           "gridPos": {
             "h": 10,
-            "w": 4,
-            "x": 0,
-            "y": 5
+            "w": 5,
+            "x": 5,
+            "y": 9
           },
-          "id": 60,
+          "id": 73,
           "options": {
-            "orientation": "horizontal",
+            "orientation": "auto",
             "reduceOptions": {
               "calcs": [
                 "lastNotNull"
@@ -1256,103 +175,27 @@
             "showThresholdLabels": false,
             "showThresholdMarkers": true
           },
-          "pluginVersion": "7.1.5",
+          "pluginVersion": "8.5.3",
           "targets": [
             {
               "datasource": {
                 "type": "graphite",
                 "uid": "WWW4_h97z"
               },
+              "refCount": 0,
               "refId": "A",
-              "target": "alias(cicd.solr.fullindex.$env.main.mcc.orch.metrics.duration, 'Orch_last_duration')",
+              "target": "alias(countSeries(cicd.solr.fullindex.$env.main.mcc.fullindex.success), 'success')",
               "textEditor": false
             }
           ],
-          "title": "Orchestration Last Duration",
+          "title": "Total FI Success",
           "type": "gauge"
         },
         {
-          "datasource": null,
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "custom": {},
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "light-blue",
-                    "value": null
-                  }
-                ]
-              },
-              "unit": "s"
-            },
-            "overrides": []
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
           },
-          "gridPos": {
-            "h": 10,
-            "w": 12,
-            "x": 4,
-            "y": 5
-          },
-          "id": 46,
-          "options": {
-            "displayMode": "lcd",
-            "minVizHeight": 8,
-            "minVizWidth": 0,
-            "orientation": "horizontal",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showUnfilled": true,
-            "text": {}
-          },
-          "pluginVersion": "7.1.5",
-          "targets": [
-            {
-              "datasource": {
-                "type": "graphite",
-                "uid": "GsHRwjXnk"
-              },
-              "refCount": 0,
-              "refId": "A",
-              "target": "alias(cicd.solr.fullindex.$env.main.mcc.orch.steps.index_tar.duration, 'index_tar')",
-              "textEditor": false
-            },
-            {
-              "datasource": {
-                "type": "graphite",
-                "uid": "GsHRwjXnk"
-              },
-              "hide": false,
-              "refCount": 0,
-              "refId": "B",
-              "target": "alias(cicd.solr.fullindex.$env.main.mcc.orch.steps.cloud_deploy.duration, 'cloud_deploy')",
-              "textEditor": false
-            }
-          ],
-          "title": "Orchestration stages  Last Duration",
-          "type": "bargauge"
-        },
-        {
-          "aliasColors": {},
-          "breakPoint": "50%",
-          "cacheTimeout": null,
-          "combine": {
-            "label": "Others",
-            "threshold": 0
-          },
-          "datasource": null,
-          "description": "",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1369,16 +212,1519 @@
             },
             "overrides": []
           },
+          "gridPos": {
+            "h": 10,
+            "w": 7,
+            "x": 10,
+            "y": 9
+          },
+          "id": 8,
+          "links": [],
+          "options": {
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "pieType": "pie",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "7.1.5",
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "GsHRwjXnk"
+              },
+              "hide": false,
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias(countSeries(cicd.solr.fullindex.$env.main.mcc.fullindex.success), 'success')",
+              "textEditor": false
+            },
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "GsHRwjXnk"
+              },
+              "refCount": 0,
+              "refId": "C",
+              "target": "alias(countSeries(cicd.solr.fullindex.$env.main.mcc.fullindex.fail_*), 'fail')",
+              "textEditor": false
+            }
+          ],
+          "title": "FI Success/Fail Ratio",
+          "type": "piechart"
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "light-blue",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 4,
+            "x": 0,
+            "y": 19
+          },
+          "id": 62,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.5.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "refId": "A",
+              "target": "alias(keepLastValue(cicd.solr.fullindex.$env.main.mcc.fullindex.duration), 'FI_Last_Duration')",
+              "textEditor": false
+            }
+          ],
+          "title": "FI Last Duration",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "light-blue",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 13,
+            "x": 4,
+            "y": 19
+          },
+          "id": 64,
+          "options": {
+            "displayMode": "lcd",
+            "minVizHeight": 8,
+            "minVizWidth": 0,
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "text": {}
+          },
+          "pluginVersion": "8.5.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias(cicd.solr.fullindex.$env.main.common.extract.duration, 'extract')",
+              "textEditor": false
+            },
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "hide": false,
+              "refCount": 0,
+              "refId": "B",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.metadata.duration, 'metadata')",
+              "textEditor": false
+            },
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "hide": false,
+              "refCount": 0,
+              "refId": "C",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.metrics.duration, 'wall_flower')",
+              "textEditor": false
+            },
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "hide": false,
+              "refCount": 0,
+              "refId": "D",
+              "target": "alias(keepLastValue(cicd.solr.fullindex.$env.main.mcc.orch.metrics.duration), 'orchestration')",
+              "textEditor": false
+            }
+          ],
+          "title": "FI Components Last  Duration",
+          "type": "bargauge"
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "light-blue",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 4,
+            "x": 0,
+            "y": 29
+          },
+          "id": 56,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.5.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "refId": "A",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.fullindex.duration, 'fullIndex')",
+              "textEditor": false
+            }
+          ],
+          "title": "FI Average Duration",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "light-blue",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 13,
+            "x": 4,
+            "y": 29
+          },
+          "id": 50,
+          "options": {
+            "displayMode": "lcd",
+            "minVizHeight": 8,
+            "minVizWidth": 0,
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "text": {}
+          },
+          "pluginVersion": "8.5.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias(cicd.solr.fullindex.$env.main.common.extract.duration, 'extract')",
+              "textEditor": false
+            },
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "hide": false,
+              "refCount": 0,
+              "refId": "B",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.metadata.duration, 'metadata')",
+              "textEditor": false
+            },
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "hide": false,
+              "refCount": 0,
+              "refId": "C",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.metrics.duration, 'wall_flower')",
+              "textEditor": false
+            },
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "hide": false,
+              "refCount": 0,
+              "refId": "D",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.orch.metrics.duration, 'orchestration')",
+              "textEditor": false
+            }
+          ],
+          "title": "FI components Average Duration",
+          "type": "bargauge"
+        },
+        {
+          "cards": {},
+          "color": {
+            "cardColor": "#b4ff00",
+            "colorScale": "sqrt",
+            "colorScheme": "interpolateOranges",
+            "exponent": 0.5,
+            "mode": "spectrum"
+          },
+          "dataFormat": "timeseries",
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 12,
+            "x": 4,
+            "y": 38
+          },
+          "heatmap": {},
+          "hideZeroBuckets": false,
+          "highlightCards": true,
+          "id": 77,
+          "legend": {
+            "show": false
+          },
+          "reverseYBuckets": false,
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "refId": "A",
+              "target": "cicd.solr.fullindex.$env.main.mcc.fullindex.duration"
+            }
+          ],
+          "title": "FI success duration",
+          "tooltip": {
+            "show": true,
+            "showHistogram": false
+          },
+          "type": "heatmap",
+          "xAxis": {
+            "show": true
+          },
+          "yAxis": {
+            "format": "s",
+            "logBase": 1,
+            "show": true
+          },
+          "yBucketBound": "auto"
+        }
+      ],
+      "title": "Full Index",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": {
+        "type": "graphite",
+        "uid": "WWW4_h97z"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 18,
+      "panels": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [
+                {
+                  "options": {
+                    "1": {
+                      "color": "green",
+                      "index": 0,
+                      "text": "Yes"
+                    }
+                  },
+                  "type": "value"
+                },
+                {
+                  "options": {
+                    "match": "null+nan",
+                    "result": {
+                      "color": "red",
+                      "index": 1,
+                      "text": "No"
+                    }
+                  },
+                  "type": "special"
+                }
+              ],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 5,
+            "x": 0,
+            "y": 39
+          },
+          "id": 75,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.5.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "refId": "A",
+              "target": "cicd.solr.fullindex.$env.main.common.extract.success",
+              "textEditor": false
+            }
+          ],
+          "timeFrom": "24h",
+          "title": "Extract Happend Today",
+          "type": "stat"
+        },
+        {
+          "cards": {},
+          "color": {
+            "cardColor": "#b4ff00",
+            "colorScale": "sqrt",
+            "colorScheme": "interpolateBlues",
+            "exponent": 0.5,
+            "min": 1,
+            "mode": "spectrum"
+          },
+          "dataFormat": "timeseries",
+          "datasource": {
+            "type": "graphite",
+            "uid": "GsHRwjXnk"
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 13,
+            "x": 5,
+            "y": 39
+          },
+          "heatmap": {},
+          "hideZeroBuckets": false,
+          "highlightCards": true,
+          "id": 13,
+          "legend": {
+            "show": false
+          },
+          "pluginVersion": "7.1.5",
+          "reverseYBuckets": false,
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "GsHRwjXnk"
+              },
+              "refId": "A",
+              "target": "cicd.solr.fullindex.$env.main.common.extract.duration",
+              "textEditor": false
+            }
+          ],
+          "title": "Extract Duration",
+          "tooltip": {
+            "show": true,
+            "showHistogram": false
+          },
+          "type": "heatmap",
+          "xAxis": {
+            "show": true
+          },
+          "yAxis": {
+            "format": "s",
+            "logBase": 1,
+            "show": true
+          },
+          "yBucketBound": "auto"
+        },
+        {
+          "aliasColors": {},
+          "breakPoint": "50%",
+          "combine": {
+            "label": "Others",
+            "threshold": 0
+          },
+          "datasource": {
+            "type": "graphite",
+            "uid": "GsHRwjXnk"
+          },
+          "description": "",
           "fontSize": "80%",
           "format": "short",
           "gridPos": {
             "h": 10,
+            "w": 6,
+            "x": 18,
+            "y": 39
+          },
+          "id": 26,
+          "legend": {
+            "show": true,
+            "values": true
+          },
+          "legendType": "Under graph",
+          "links": [],
+          "nullPointMode": "connected",
+          "pieType": "pie",
+          "strokeWidth": 1,
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "GsHRwjXnk"
+              },
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias(countSeries(cicd.solr.fullindex.dev1.main.mcc.metadata.success), 'success')",
+              "textEditor": false
+            },
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "GsHRwjXnk"
+              },
+              "hide": false,
+              "refCount": 0,
+              "refId": "B",
+              "target": "alias(countSeries(cicd.solr.fullindex.$env.main.mcc.metadata.fail_*), 'fail')",
+              "textEditor": false
+            }
+          ],
+          "title": "Extract Success/Fail Ratio",
+          "type": "grafana-piechart-panel",
+          "valueName": "current"
+        }
+      ],
+      "title": "Extract",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": {
+        "type": "graphite",
+        "uid": "WWW4_h97z"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 2
+      },
+      "id": 20,
+      "panels": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [
+                {
+                  "options": {
+                    "1": {
+                      "color": "green",
+                      "index": 0,
+                      "text": "Yes"
+                    }
+                  },
+                  "type": "value"
+                },
+                {
+                  "options": {
+                    "match": "null+nan",
+                    "result": {
+                      "color": "red",
+                      "index": 1,
+                      "text": "No"
+                    }
+                  },
+                  "type": "special"
+                }
+              ],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 5,
+            "x": 0,
+            "y": 3
+          },
+          "id": 79,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.5.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "refId": "A",
+              "target": "cicd.solr.fullindex.$env.main.mcc.metadata.success",
+              "textEditor": false
+            }
+          ],
+          "timeFrom": "24h",
+          "title": "Metadata Happend Today",
+          "type": "stat"
+        },
+        {
+          "cards": {},
+          "color": {
+            "cardColor": "#b4ff00",
+            "colorScale": "sqrt",
+            "colorScheme": "interpolateBlues",
+            "exponent": 0.5,
+            "min": 1,
+            "mode": "spectrum"
+          },
+          "dataFormat": "timeseries",
+          "datasource": {
+            "type": "graphite",
+            "uid": "GsHRwjXnk"
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 5,
+            "y": 3
+          },
+          "heatmap": {},
+          "hideZeroBuckets": false,
+          "highlightCards": true,
+          "id": 70,
+          "legend": {
+            "show": false
+          },
+          "pluginVersion": "7.1.5",
+          "reverseYBuckets": false,
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "GsHRwjXnk"
+              },
+              "refId": "A",
+              "target": "cicd.solr.fullindex.$env.main.mcc.metadata.duration",
+              "textEditor": false
+            }
+          ],
+          "title": "Metadata Duration",
+          "tooltip": {
+            "show": true,
+            "showHistogram": false
+          },
+          "type": "heatmap",
+          "xAxis": {
+            "show": true
+          },
+          "yAxis": {
+            "format": "s",
+            "logBase": 1,
+            "show": true
+          },
+          "yBucketBound": "auto"
+        },
+        {
+          "aliasColors": {},
+          "breakPoint": "50%",
+          "combine": {
+            "label": "Others",
+            "threshold": 0
+          },
+          "datasource": {
+            "type": "graphite",
+            "uid": "GsHRwjXnk"
+          },
+          "description": "",
+          "fontSize": "80%",
+          "format": "short",
+          "gridPos": {
+            "h": 9,
+            "w": 7,
+            "x": 17,
+            "y": 3
+          },
+          "id": 32,
+          "legend": {
+            "show": true,
+            "values": true
+          },
+          "legendType": "Under graph",
+          "links": [],
+          "nullPointMode": "connected",
+          "pieType": "pie",
+          "strokeWidth": 1,
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "GsHRwjXnk"
+              },
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias(countSeries(cicd.solr.fullindex.$env.main.mcc.metadata.success), 'success')",
+              "textEditor": true
+            },
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "GsHRwjXnk"
+              },
+              "hide": false,
+              "refCount": 0,
+              "refId": "B",
+              "target": "alias(countSeries(cicd.solr.fullindex.$env.main.mcc.metadata.fail_*), 'fail')",
+              "textEditor": true
+            }
+          ],
+          "title": "Extract Success/Fail Ratio",
+          "type": "grafana-piechart-panel",
+          "valueName": "current"
+        }
+      ],
+      "title": "Meta Data",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": {
+        "type": "graphite",
+        "uid": "WWW4_h97z"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 3
+      },
+      "id": 22,
+      "panels": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [
+                {
+                  "options": {
+                    "1": {
+                      "color": "green",
+                      "index": 0,
+                      "text": "Yes"
+                    }
+                  },
+                  "type": "value"
+                },
+                {
+                  "options": {
+                    "match": "null+nan",
+                    "result": {
+                      "color": "red",
+                      "index": 1,
+                      "text": "No"
+                    }
+                  },
+                  "type": "special"
+                }
+              ],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 5,
+            "x": 0,
+            "y": 4
+          },
+          "id": 80,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.5.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "refId": "A",
+              "target": "cicd.solr.fullindex.$env.main.mcc.wallflower.metrics.success",
+              "textEditor": false
+            }
+          ],
+          "timeFrom": "24h",
+          "title": "Wall Flower Happend Today",
+          "type": "stat"
+        },
+        {
+          "aliasColors": {},
+          "breakPoint": "50%",
+          "combine": {
+            "label": "Others",
+            "threshold": 0
+          },
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
+          "description": "",
+          "fontSize": "80%",
+          "format": "short",
+          "gridPos": {
+            "h": 9,
+            "w": 7,
+            "x": 5,
+            "y": 4
+          },
+          "id": 38,
+          "legend": {
+            "show": true,
+            "values": true
+          },
+          "legendType": "Under graph",
+          "links": [],
+          "nullPointMode": "connected",
+          "pieType": "pie",
+          "strokeWidth": 1,
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias(countSeries(cicd.solr.fullindex.$env.main.mcc.wallflower.metrics.success), 'success')",
+              "textEditor": true
+            },
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "hide": false,
+              "refCount": 0,
+              "refId": "B",
+              "target": "alias(countSeries(cicd.solr.fullindex.$env.main.mcc.wallflower.metrics.fail*), 'fail')",
+              "textEditor": true
+            }
+          ],
+          "title": "Wall Flower Success/Fail Ratio",
+          "type": "grafana-piechart-panel",
+          "valueName": "current"
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "light-blue",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 5,
+            "x": 0,
+            "y": 13
+          },
+          "id": 66,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.5.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "refId": "A",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.metrics.duration, 'wallflower')",
+              "textEditor": false
+            }
+          ],
+          "title": "Wall flower Last Duration",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "light-blue",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 14,
+            "x": 5,
+            "y": 13
+          },
+          "id": 36,
+          "options": {
+            "displayMode": "lcd",
+            "minVizHeight": 8,
+            "minVizWidth": 0,
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "text": {}
+          },
+          "pluginVersion": "8.5.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.steps.catchup_fi.duration, 'catchup_fi')",
+              "textEditor": false
+            },
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "hide": false,
+              "refCount": 0,
+              "refId": "B",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.steps.catchup_nrt.duration, 'catchup_nrt')",
+              "textEditor": false
+            },
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "hide": false,
+              "refCount": 0,
+              "refId": "C",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.steps.optimize.duration, 'optimize')",
+              "textEditor": false
+            },
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "hide": false,
+              "refCount": 0,
+              "refId": "D",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.steps.regression.duration, 'regression')",
+              "textEditor": false
+            }
+          ],
+          "title": "Wall flower stages  Last  Duration",
+          "type": "bargauge"
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "light-blue",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 5,
+            "x": 0,
+            "y": 23
+          },
+          "id": 58,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.5.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "refId": "A",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.metrics.duration, 'fullIndex')",
+              "textEditor": false
+            }
+          ],
+          "title": "Wall flower  Average Duration",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "light-blue",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 14,
+            "x": 5,
+            "y": 23
+          },
+          "id": 67,
+          "options": {
+            "displayMode": "lcd",
+            "minVizHeight": 8,
+            "minVizWidth": 0,
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "text": {}
+          },
+          "pluginVersion": "8.5.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.steps.catchup_fi.duration, 'catchup_fi')",
+              "textEditor": false
+            },
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "hide": false,
+              "refCount": 0,
+              "refId": "B",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.steps.catchup_nrt.duration, 'catchup_nrt')",
+              "textEditor": false
+            },
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "hide": false,
+              "refCount": 0,
+              "refId": "C",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.steps.optimize.duration, 'optimize')",
+              "textEditor": false
+            },
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "hide": false,
+              "refCount": 0,
+              "refId": "D",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.wallflower.steps.regression.duration, 'regression')",
+              "textEditor": false
+            }
+          ],
+          "title": "Wall flower stages  Average Duration",
+          "type": "bargauge"
+        },
+        {
+          "cards": {},
+          "color": {
+            "cardColor": "#b4ff00",
+            "colorScale": "sqrt",
+            "colorScheme": "interpolateBlues",
+            "exponent": 0.5,
+            "min": 1,
+            "mode": "spectrum"
+          },
+          "dataFormat": "timeseries",
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 33
+          },
+          "heatmap": {},
+          "hideZeroBuckets": false,
+          "highlightCards": true,
+          "id": 48,
+          "legend": {
+            "show": false
+          },
+          "reverseYBuckets": false,
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "refId": "A",
+              "target": "cicd.solr.fullindex.$env.main.mcc.wallflower.metrics.duration",
+              "textEditor": true
+            }
+          ],
+          "title": "WallFlower Duration",
+          "tooltip": {
+            "show": true,
+            "showHistogram": false
+          },
+          "type": "heatmap",
+          "xAxis": {
+            "show": true
+          },
+          "yAxis": {
+            "format": "s",
+            "logBase": 1,
+            "show": true
+          },
+          "yBucketBound": "auto"
+        }
+      ],
+      "title": "Wall flower",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "datasource": {
+        "type": "graphite",
+        "uid": "WWW4_h97z"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 4
+      },
+      "id": 24,
+      "panels": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [
+                {
+                  "options": {
+                    "1": {
+                      "color": "green",
+                      "index": 0,
+                      "text": "Yes"
+                    }
+                  },
+                  "type": "value"
+                },
+                {
+                  "options": {
+                    "match": "null+nan",
+                    "result": {
+                      "color": "red",
+                      "index": 1,
+                      "text": "No"
+                    }
+                  },
+                  "type": "special"
+                }
+              ],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 5,
+            "x": 0,
+            "y": 5
+          },
+          "id": 82,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.5.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "refId": "A",
+              "target": "cicd.solr.fullindex.$env.main.mcc.orch.metrics.success",
+              "textEditor": false
+            }
+          ],
+          "timeFrom": "24h",
+          "title": "Orchestration Happend Today",
+          "type": "stat"
+        },
+        {
+          "aliasColors": {},
+          "breakPoint": "50%",
+          "combine": {
+            "label": "Others",
+            "threshold": 0
+          },
+          "datasource": {
+            "type": "graphite",
+            "uid": "GsHRwjXnk"
+          },
+          "description": "",
+          "fontSize": "80%",
+          "format": "short",
+          "gridPos": {
+            "h": 9,
             "w": 8,
-            "x": 16,
+            "x": 5,
             "y": 5
           },
           "id": 44,
-          "interval": null,
           "legend": {
             "show": true,
             "values": true
@@ -1416,14 +1762,16 @@
           "valueName": "current"
         },
         {
-          "datasource": null,
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
           "description": "",
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "thresholds"
               },
-              "custom": {},
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
@@ -1440,9 +1788,142 @@
           },
           "gridPos": {
             "h": 10,
-            "w": 4,
+            "w": 5,
             "x": 0,
-            "y": 15
+            "y": 14
+          },
+          "id": 60,
+          "options": {
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showThresholdLabels": false,
+            "showThresholdMarkers": true
+          },
+          "pluginVersion": "8.5.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "WWW4_h97z"
+              },
+              "refId": "A",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.orch.metrics.duration, 'Orch_last_duration')",
+              "textEditor": false
+            }
+          ],
+          "title": "Orchestration Last Duration",
+          "type": "gauge"
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "GsHRwjXnk"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "light-blue",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 13,
+            "x": 5,
+            "y": 14
+          },
+          "id": 46,
+          "options": {
+            "displayMode": "lcd",
+            "minVizHeight": 8,
+            "minVizWidth": 0,
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "text": {}
+          },
+          "pluginVersion": "8.5.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "GsHRwjXnk"
+              },
+              "refCount": 0,
+              "refId": "A",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.orch.steps.index_tar.duration, 'index_tar')",
+              "textEditor": false
+            },
+            {
+              "datasource": {
+                "type": "graphite",
+                "uid": "GsHRwjXnk"
+              },
+              "hide": false,
+              "refCount": 0,
+              "refId": "B",
+              "target": "alias(cicd.solr.fullindex.$env.main.mcc.orch.steps.cloud_deploy.duration, 'cloud_deploy')",
+              "textEditor": false
+            }
+          ],
+          "title": "Orchestration stages  Last Duration",
+          "type": "bargauge"
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "WWW4_h97z"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 5,
+            "x": 0,
+            "y": 24
           },
           "id": 68,
           "options": {
@@ -1457,7 +1938,7 @@
             "showThresholdLabels": false,
             "showThresholdMarkers": true
           },
-          "pluginVersion": "7.1.5",
+          "pluginVersion": "8.5.3",
           "targets": [
             {
               "datasource": {
@@ -1473,14 +1954,16 @@
           "type": "gauge"
         },
         {
-          "datasource": null,
+          "datasource": {
+            "type": "graphite",
+            "uid": "GsHRwjXnk"
+          },
           "description": "",
           "fieldConfig": {
             "defaults": {
               "color": {
                 "mode": "thresholds"
               },
-              "custom": {},
               "mappings": [],
               "thresholds": {
                 "mode": "absolute",
@@ -1498,8 +1981,8 @@
           "gridPos": {
             "h": 10,
             "w": 12,
-            "x": 4,
-            "y": 15
+            "x": 5,
+            "y": 24
           },
           "id": 69,
           "options": {
@@ -1517,7 +2000,7 @@
             "showUnfilled": true,
             "text": {}
           },
-          "pluginVersion": "7.1.5",
+          "pluginVersion": "8.5.3",
           "targets": [
             {
               "datasource": {
@@ -1545,10 +2028,7 @@
           "type": "bargauge"
         },
         {
-          "cards": {
-            "cardPadding": null,
-            "cardRound": null
-          },
+          "cards": {},
           "color": {
             "cardColor": "#b4ff00",
             "colorScale": "sqrt",
@@ -1561,17 +2041,11 @@
             "type": "graphite",
             "uid": "WWW4_h97z"
           },
-          "fieldConfig": {
-            "defaults": {
-              "custom": {}
-            },
-            "overrides": []
-          },
           "gridPos": {
             "h": 9,
             "w": 24,
             "x": 0,
-            "y": 25
+            "y": 34
           },
           "heatmap": {},
           "hideZeroBuckets": false,
@@ -1601,43 +2075,36 @@
           "xAxis": {
             "show": true
           },
-          "xBucketNumber": null,
-          "xBucketSize": null,
           "yAxis": {
-            "decimals": null,
             "format": "s",
             "logBase": 1,
-            "max": null,
-            "min": null,
-            "show": true,
-            "splitFactor": null
+            "show": true
           },
-          "yBucketBound": "auto",
-          "yBucketNumber": null,
-          "yBucketSize": null
+          "yBucketBound": "auto"
         }
       ],
       "title": "Orachestration",
       "type": "row"
     }
   ],
-  "refresh": "",
-  "schemaVersion": 26,
+  "refresh": "1m",
+  "schemaVersion": 36,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
-        "allValue": null,
         "current": {
           "selected": false,
           "text": "dev1",
           "value": "dev1"
         },
-        "datasource": "Graphite-Prod",
+        "datasource": {
+          "uid": "Graphite-Prod"
+        },
         "definition": "cicd.solr.fullindex.*",
         "error": {
-          "message": "Datasource GsHRwjXnk was not found"
+          "message": "Datasource Graphite-Prod was not found"
         },
         "hide": 0,
         "includeAll": false,
@@ -1651,7 +2118,6 @@
         "skipUrlSync": false,
         "sort": 1,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -1659,7 +2125,7 @@
     ]
   },
   "time": {
-    "from": "now-2d",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {
@@ -1674,7 +2140,8 @@
     ]
   },
   "timezone": "",
-  "title": "Search BE - Full Index Update_noepoch",
-  "uid": "1234mnbvc",
-  "version": 44
+  "title": "Search BE - Full Index Update_latest",
+  "uid": "zxcvbnm",
+  "version": 8,
+  "weekStart": ""
 }
