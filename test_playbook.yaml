@@ -236,7 +236,7 @@
             timestamp: "{{ metadata_start_time|int }}"
           - key: "{{ prefix }}.metadata.duration"
             value: "{{ metadata_duration_sec|int }}"
-            timestamp: "{{ metadata_duration_sec|int }}"
+            timestamp: "{{ metadata_start_time|int + metadata_duration_sec|int }}"
           - key: "{{ prefix }}.metadata.{{ metadata_status }}"
             timestamp: "{{ metadata_start_time|int + metadata_duration_sec|int }}"
       when: 
