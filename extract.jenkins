@@ -1,0 +1,66 @@
+
+@NonCPS
+void sendMetric(def metric){
+    sh "echo ${metric} | nc -w 1 localhost 2003"
+}
+
+@NonCPS
+def getepoch(){
+     Date latestdate = new Date();
+     return latestdate.getTime()/1000
+}
+
+@NonCPS
+def getduration(def start){
+    int end=getepoch()
+    int begin= start as int
+    return (end-begin)
+}
+
+def starttime=""
+def duration=""
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Hello') {
+            steps {
+
+                echo 'Hello World'
+                sh "sleep 10"
+            }
+        }
+        stage ('trigger other builds'){
+            steps {
+                script{
+                    starttime=(currentBuild.startTimeInMillis/1000) as int
+                }
+                echo "skipping"
+                build wait: false, propagate: false, job: 'metadata'
+                build job: 'wallflower', parameters: [string(name: 'start_time', value: starttime as String)]
+            }
+        }
+    }
+    
+    post {
+        always{
+            script {
+            starttime=(currentBuild.startTimeInMillis/1000) as int
+            sendMetric("cicd.solr.fullindex.dev.main.common.extract.start 1 ${starttime}")
+            
+            duration=(currentBuild.duration/1000) as int
+            durationtimestamp=(starttime as int)+(duration as int)
+            sendMetric("cicd.solr.fullindex.dev.main.common.extract.duration ${duration} ${durationtimestamp}")
+            
+            echo "BUILD_STATUS:${currentBuild.currentResult}"
+            if (currentBuild.currentResult == 'SUCCESS') {
+               sendMetric("cicd.solr.fullindex.dev.main.common.extract.success 1 ${starttime}")
+            } else {
+               sendMetric("cicd.solr.fullindex.dev.main.common.extract.fail_error 1 ${starttime}")
+            }
+            
+          }
+        }
+    }
+}
