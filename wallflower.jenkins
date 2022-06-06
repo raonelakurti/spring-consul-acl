@@ -1,0 +1,182 @@
+
+@NonCPS
+void sendMetric(def metric){
+    sh "echo ${metric} | nc -w 1 localhost 2003"
+}
+
+@NonCPS
+def getepoch(){
+     Date latestdate = new Date();
+     return latestdate.getTime()
+}
+
+@NonCPS
+def getduration(def start,def end){
+    int _start= start as int
+    int _end= end as int
+    return (_end-_start)
+}
+
+def FAIL_STAGE=''
+def catchup_fi_start=''
+def catchup_nrt_start=''
+def optimize_start=''
+def regression_start=''
+
+pipeline {
+    agent any
+    parameters {
+      string 'start_time'
+    }
+    stages {
+        stage('catchup_fi') {
+            steps {
+                script{
+                    catchup_fi_start=getepoch()
+                    FAIL_STAGE=env.STAGE_NAME
+                    
+                }
+                echo 'Hello World - catchup_fi'
+            }
+        }
+        stage('catchup_nrt') {
+            steps {
+                script{ 
+                    catchup_nrt_start=getepoch()
+                    FAIL_STAGE=env.STAGE_NAME 
+                }
+                echo 'Hello World - catchup_nrt'
+            }
+        }
+        stage('optimize') {
+            steps {
+                script{
+                    optimize_start=getepoch()
+                    FAIL_STAGE=env.STAGE_NAME 
+                }
+                echo 'Hello World - optimize'
+            }
+        }
+        stage('regression') {
+            steps {
+                script{
+                    regression_start=getepoch()
+                    FAIL_STAGE=env.STAGE_NAME 
+                }
+                echo 'Hello World - regression'
+            }
+        }
+        stage('Trigger Orchestartion') {
+            steps {
+              script{
+                  script{ FAIL_STAGE=env.STAGE_NAME }
+                }
+                build job: 'orchestration', parameters: [string(name: 'start_time', value: start_time )]
+            }
+        }
+    }
+    
+   post {
+      always {
+        script {
+           //cicd.solr.fullindex.dev.main.mcc.wallflower.metrics.start'
+           //cicd.solr.fullindex.dev.main.mcc.wallflower.metrics.duration'
+           //cicd.solr.fullindex.dev.main.mcc.wallflower.metrics.success'
+            def timestamp=(getepoch()/1000) as int
+            def starttime=(currentBuild.startTimeInMillis/1000) as int
+            def duration=(currentBuild.duration/1000) as int
+            sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.metrics.start 1 ${starttime}")
+            sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.metrics.duration ${duration} ${timestamp}")
+            if (currentBuild.currentResult == 'SUCCESS') {
+                //wall flower success
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.metrics.success 1 ${timestamp}")
+               
+               //catchup_fi
+               def starttime=(catchup_fi_start/1000) as int
+               def duration=(getduration(catchup_fi_start,catchup_nrt_start)/1000) as int
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.catchup_fi.start 1 ${starttime}")
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.catchup_fi.duration ${duration} ${timestamp}")
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.catchup_fi.success 1 ${timestamp}")
+
+               //catchup_nrt
+               def starttime=(catchup_nrt_start/1000) as int
+               def duration=(getduration(catchup_nrt_start,optimize_start)/1000) as int
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.catchup_nrt.start 1 ${starttime}")
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.catchup_nrt.duration ${duration} ${timestamp}")
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.catchup_nrt.success 1 ${timestamp}")
+
+               //optimize
+               def starttime=(optimize_start/1000) as int
+               def duration=(getduration(optimize_start,regression_start)/1000) as int
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.optimize.start 1 ${starttime}")
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.optimize.duration ${duration} ${timestamp}")
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.optimize.success 1 ${timestamp}")
+
+               //regression
+               def starttime=(regression_start/1000) as int
+               def duration=(getduration(regression_start,getepoch())/1000) as int
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.regression.start 1 ${starttime}")
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.regression.duration ${duration} ${timestamp}")
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.regression.success 1 ${timestamp}")
+
+            } else {
+               //wall flower fail
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.metrics.fail_error 1 ${timestamp}") 
+
+                //catchup_fi
+                def starttime=(catchup_fi_start/1000) as int
+                
+                sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.catchup_fi.start 1 ${starttime}")    
+               if(FAIL_STAGE == 'catchup_fi') {
+                    def duration=(getduration(catchup_fi_start,getepoch())/1000) as int
+                    sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.catchup_fi.duration ${duration} ${timestamp}") 
+                    sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.catchup_fi.fail_error 1 ${timestamp}")
+               } 
+               else {
+                    def duration=(getduration(catchup_fi_start,catchup_nrt_start)/1000) as int
+                    sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.catchup_fi.duration ${duration} ${timestamp}")
+                    sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.catchup_fi.success 1 ${timestamp}")
+               }
+               //catchup_nrt
+               def starttime=(catchup_nrt_start/1000) as int
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.catchup_nrt.start 1 ${starttime}") 
+               if(FAIL_STAGE == 'catchup_nrt') {
+                    def duration=(getduration(catchup_nrt_start,getepoch())/1000) as int
+                    sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.catchup_nrt.duration ${duration} ${timestamp}")
+                    sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.catchup_nrt.fail_error 1 ${timestamp}")
+               }
+               else {
+                    def duration=(getduration(catchup_nrt_start,optimize_start)/1000) as int
+                    sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.catchup_nrt.duration ${duration} ${timestamp}")
+                    sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.catchup_nrt.success 1 ${timestamp}")
+               }
+               //optimize
+               def starttime=(optimize_start/1000) as int
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.optimize.start 1 ${starttime}")
+               if(FAIL_STAGE == 'optimize') {
+                    def duration=(getduration(optimize_start,getepoch())/1000) as int
+                    sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.optimize.duration ${duration} ${timestamp}")
+                    sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.optimize.fail_error 1 ${timestamp}")
+               }
+               else {
+                    def duration=(getduration(optimize_start,regression_start)/1000) as int
+                    sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.optimize.duration ${duration} ${timestamp}")
+                    sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.optimize.success 1 ${timestamp}")
+               }
+               //regression
+               def starttime=(regression_start/1000) as int
+               def duration=(getduration(regression_start,getepoch())/1000) as int
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.regression.start 1 ${starttime}")
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.regression.duration ${duration} ${timestamp}")     
+               if(FAIL_STAGE == 'regression') {
+                    sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.regression.fail_error 1 ${timestamp}")
+               }
+               else {
+                    sendMetric("cicd.solr.fullindex.dev.main.mcc.wallflower.steps.regression.success 1 ${timestamp}")
+               }
+            }
+          }
+        // One or more steps need to be included within each condition's block.
+      }
+    }
+}
