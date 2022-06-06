@@ -1,0 +1,64 @@
+
+@NonCPS
+void sendMetric(def metric){
+    sh "echo ${metric} | nc -w 1 localhost 2003"
+}
+
+@NonCPS
+def getepoch(){
+     Date latestdate = new Date();
+     return latestdate.getTime()/1000
+}
+
+@NonCPS
+def getduration(def start){
+    int end=getepoch()
+    int begin= start as int
+    return (end-begin)
+}
+
+def starttime=""
+def duration=""
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Hello') {
+            steps {
+
+                echo 'Hello World'
+                sh "sleep 10"
+            }
+        }
+        stage ('trigger other builds'){
+            steps {
+                script{
+                    starttime=getepoch() as int
+                    echo "starttime:${starttime}"
+                }
+            }
+        }
+    }
+    
+    post {
+        always{
+            script {
+            starttime=(currentBuild.startTimeInMillis/1000) as int
+            sendMetric("cicd.solr.fullindex.dev.main.mcc.metadata.start 1 ${starttime}")
+            
+            duration=(currentBuild.duration/1000) as int
+            durationtimestamp=(starttime as int)+(duration as int)
+            sendMetric("cicd.solr.fullindex.dev.main.mcc.metadata.duration ${duration} ${durationtimestamp}")
+            
+            echo "BUILD_STATUS:${currentBuild.currentResult}"
+            if (currentBuild.currentResult == 'SUCCESS') {
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.metadata.success 1 ${starttime}")
+            } else {
+               sendMetric("cicd.solr.fullindex.dev.main.mcc.metadata.fail_error 1 ${starttime}")
+            }
+            
+          }
+        }
+    }
+}
