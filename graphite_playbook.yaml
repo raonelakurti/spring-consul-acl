@@ -39,7 +39,7 @@
         metadata_status: >-
           {%- set dice = range(1, 100)|random -%}
           {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }}
-          
+
         # FI CATCH UP METRICS
         fi_catchup_status: >-
           {%- set dice = range(1, 100)|random -%}
@@ -65,10 +65,7 @@
         # NRT CATCHUP STATUS
         nrt_catchup_status: >-
           {%- set dice = range(1, 100)|random -%}
-          {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' }}               
-    - debug:
-        var: nrt_catchup_status
-
+          {{ 'success' if dice < 90 else 'fail_timeout' if dice < 95 else 'fail_error' | trim}}
     - set_fact:
         nrt_catchup_duration_sec: >-
           {%- if nrt_catchup_status == 'fail_timeout' -%}
@@ -131,9 +128,21 @@
           {%- elif regression_status != 'success' -%}
             {{ fi_catchup_duration_sec|int + nrt_catchup_duration_sec|int + optimize_duration_sec|int + regression_duration_sec|int }}
           {%- else -%}
-            {{ range(600, 720)|random * 60 }}
+            {{ fi_catchup_duration_sec|int + nrt_catchup_duration_sec|int + optimize_duration_sec|int + regression_duration_sec|int }}
           {%- endif -%}
-
+    
+    - name: Print some debug information 
+      vars: 
+        msg: |
+          wallflower_duration_sec : {{ wallflower_duration_sec }}
+          fi_catchup_duration_sec : {{ fi_catchup_duration_sec }}
+          nrt_catchup_duration_sec : {{ nrt_catchup_duration_sec }}
+          optimize_duration_sec : {{ optimize_duration_sec }}
+          regression_duration_sec : {{ regression_duration_sec }}
+      debug: 
+        msg: "{{ msg.split('\n') }}"
+       
+    - set_fact:
         # Orchestration
         # indextar status 
         index_tar_status: >-
@@ -171,7 +180,9 @@
             {{ cloud_deploy_status }}
           {%- else -%}
              success
-          {%- endif -%}  
+          {%- endif -%}
+    - set_fact:
+        orch_status: "{{orch_status | trim}}"
     - debug:
          var: orch_status 
     - set_fact:
@@ -181,8 +192,18 @@
           {%- elif cloud_deploy_status != 'success' -%}
             {{ cloud_deploy_duration_sec|int + index_tar_duration_sec|int }}
           {%- else -%}
-            {{ range(720, 900)|random * 60 }}
+            {{ cloud_deploy_duration_sec|int + index_tar_duration_sec|int }}
           {%- endif -%}
+
+    - name: Print some debug information 
+      vars: 
+        msg: |
+          orch_duration_sec : {{ orch_duration_sec }}
+          index_tar_duration_sec : {{ index_tar_duration_sec }}
+          cloud_deploy_duration_sec : {{ cloud_deploy_duration_sec }}
+      debug: 
+        msg: "{{ msg.split('\n') }}"           
+      
   
     - set_fact:
         metadata_start_time: "{{ START_TIME.stdout|int + extract_duration_sec|int }}"
@@ -203,7 +224,7 @@
     - set_fact:          
         index_tar_start_time: "{{ orch_start_time|int }}"
         cloud_deploy_start_time: "{{ orch_start_time|int + index_tar_duration_sec|int }}"
-
+    
     - set_fact: 
         extract_status: "{{extract_status | trim}}"
         metadata_status: "{{ metadata_status | trim}}"
@@ -216,7 +237,7 @@
         cloud_deploy_status : "{{ cloud_deploy_status | trim}}"
         orch_status : "{{ orch_status | trim}}"    
         full_index_status : "{{ full_index_status | trim}}" 
-
+    
 ### ------ mapping all metrics for each job and stage
 ### Extract
     - set_fact:
@@ -435,7 +456,7 @@
         - push
 
     #- name: Push metrics
-    #  shell: "echo {{ item.key }} {{ item.value|default(1)}} {{ item.timestamp }} | nc -w 1 localhost 2003"
+    #  shell: "echo {{ item.key }} {{ item.value|default(1)}} {{ item.timestamp }} "
     #  with_items: "{{ metrics }}"
     #  tags:
     #    - push  
@@ -477,7 +498,7 @@
         - push        
 
     #- name: Push metrics
-    #  shell: "echo {{ item.key }} {{ item.value|default(1)}} {{ item.timestamp }} | nc -w 1 localhost 2003"
+    #  shell: "echo {{ item.key }} {{ item.value|default(1)}} {{ item.timestamp }}"
     #  with_items: "{{ metrics }}"
     #  tags:
     #    - push                            
